@@ -1,0 +1,9 @@
+Revision history for Perl extension Array::Stream::Transactional.
+
+0.01  Sun Mar 28 08:35:23 2004
+	- original version; created by h2xs 1.22 with options
+		-X -b 5.0.0 -n Array::Stream::Transactional
+
+1.00  Mon Mar 29 11:35:00 2004
+	- Initial release
+
