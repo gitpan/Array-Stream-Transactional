@@ -1,3 +1,5 @@
+# $Id: Transactional.pm,v 1.4 2004/04/03 21:28:39 claes Exp $
+
 package Array::Stream::Transactional;
 
 use 5.00503;
@@ -5,21 +7,25 @@ use Carp qw(croak);
 use strict;
 use warnings;
 
-our $VERSION = '1.00';
+our $VERSION = '1.01';
 
 sub new {
   my ($class, $tokens) = @_;
   $class = ref $class || $class;
   croak "Not an ARRAY reference" unless(UNIVERSAL::isa($tokens, "ARRAY"));
-  my $self = bless { data => $tokens,
-		     pos => 0,
-		     transactions => [],
-		     current => undef, 
-		     previous => undef }, $class;
-
-  $self->{current} = $self->{data}->[0];
+  my $self = bless { data => $tokens }, $class;
+  $self->reset;
 
   return $self;
+}
+
+sub reset {
+  my $self = shift;
+  $self->{pos} = 0;
+  $self->{transactions} = [];
+  $self->{current} = $self->{data}->[0];
+  $self->{previous} = undef;
+  1;
 }
 
 sub pos {
@@ -44,6 +50,12 @@ sub rollback {
   croak "No more commits to rollback" unless(@{$self->{transactions}});
   ($self->{pos}, $self->{current}, $self->{previous}) = @{pop @{$self->{transactions}}};
   1;
+}
+
+sub regret {
+  my $self = shift;
+  croak "No more commits to regret" unless(@{$self->{transactions}});
+  return @{pop @{$self->{transactions}}};
 }
 
 sub current {
@@ -137,7 +149,15 @@ Push the current position, element and previous element on the transaction stack
 
 =item rollback ( )
 
-Rollback the current transaction by reseting the stream position, current and previous object. The transaction will be removed from the transaction stack so that next rollback will rollback to the commit previous to the commit that created the rollbacked transaction.
+Rollback the current transaction by reseting the stream position, current and previous element. The transaction will be removed from the transaction stack so that next rollback will rollback to the commit previous to the commit that created the rollbacked transaction.
+
+=item regret ( )
+
+Removes the top item of the commit stack. Returns the position, current element and previous element of the stream at the time the commit was made.
+
+=item reset ( )
+
+Resets the reading of the stream to position 0, current to first element and previous to undefined.
 
 =back
 

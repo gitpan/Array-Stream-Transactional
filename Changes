@@ -7,3 +7,5 @@ Revision history for Perl extension Array::Stream::Transactional.
 1.00  Mon Mar 29 11:35:00 2004
 	- Initial release
 
+1.01  Sat Apr 3 23:26:00 2004
+        - Added regret and reset methods
