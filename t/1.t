@@ -1,4 +1,4 @@
-# $Id: 1.t,v 1.3 2004/04/03 21:25:46 claes Exp $
+# $Id: 1.t,v 1.5 2004/04/08 19:36:28 claes Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 1.t'
@@ -8,7 +8,7 @@
 # change 'tests => 1' to 'tests => last_test_to_print';
 
 use Test;
-BEGIN { plan tests => 264 };
+BEGIN { plan tests => 266 };
 use Array::Stream::Transactional;
 use strict;
 
@@ -34,6 +34,7 @@ $stream->rollback;
 ok($stream->pos == 1 && $stream->current eq 'a101' && $stream->previous eq 'a100');
 $stream->rollback;
 ok($stream->pos == 0 && $stream->current eq 'a100' && !defined $stream->previous);
+ok($stream->following eq 'a101' && $stream->pos == 0);
 $stream->commit;
 
 my @compare = "a100".."a199";
@@ -75,4 +76,6 @@ my ($p1v, $p2v, $p3v) = $stream->regret;
 ok($p1 eq $p1v);
 ok($p2 eq $p2v);
 ok($p3 eq $p3v);
+
+ok($stream->rewind eq 'a139' && $stream->pos == 39);
 

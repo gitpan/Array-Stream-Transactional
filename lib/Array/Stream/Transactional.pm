@@ -1,4 +1,4 @@
-# $Id: Transactional.pm,v 1.4 2004/04/03 21:28:39 claes Exp $
+# $Id: Transactional.pm,v 1.6 2004/04/08 19:36:28 claes Exp $
 
 package Array::Stream::Transactional;
 
@@ -7,7 +7,7 @@ use Carp qw(croak);
 use strict;
 use warnings;
 
-our $VERSION = '1.01';
+our $VERSION = '1.02';
 
 sub new {
   my ($class, $tokens) = @_;
@@ -37,6 +37,19 @@ sub next {
   $self->{previous} = $self->{current};
   $self->{current} = $self->{data}->[++$self->{pos}];
   return $self->{current};
+}
+
+sub rewind {
+  my $self = shift;
+  $self->{previous} = $self->{current};
+  $self->{current} = $self->{data}->[--$self->{pos}];
+  return $self->{current};
+}
+
+sub following {
+  my $self = shift;
+  return undef if($self->{pos} == @{$self->{data}});
+  return $self->{data}->[$self->{pos} + 1];
 }
 
 sub commit {
@@ -123,6 +136,10 @@ Creates an C<Array::Stream::Transactional>. Wrapps the passed array reference. P
 
 Get the next element from the stream and increment the position in the current transaction.
 
+=item rewind ( )
+
+Get the previous element from the stream and decrement the position in the current transaction.
+
 =item current ( )
 
 Get the current element read from the stream in the current transaction.
@@ -130,6 +147,10 @@ Get the current element read from the stream in the current transaction.
 =item previous ( )
 
 Get the previous element read from the stream in the current transaction.
+
+=item following ( )
+
+Get the following element read from the strean in the current transaction. This method is like L</next> except it doesn't increment the position.
 
 =item pos ( )
 

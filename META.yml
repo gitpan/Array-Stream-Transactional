@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name: Array-Stream-Transactional
-version: 1.01
+version: 1.02
 author:
   - Claes Jacobsson, claesjac@cpan.org
 abstract: ~
@@ -10,5 +10,5 @@ requires:
 provides:
   Array::Stream::Transactional:
     file: lib/Array/Stream/Transactional.pm
-    version: 1.01
+    version: 1.02
 generated_by: Module::Build version 0.24

@@ -4,7 +4,7 @@ use ExtUtils::MakeMaker;
 WriteMakefile
   (
    NAME        => 'Array::Stream::Transactional',
-   VERSION     => '1.01',
+   VERSION     => '1.02',
    PL_FILES    => {},
    INSTALLDIRS => 'site',
    PREREQ_PM   => {

@@ -9,3 +9,6 @@ Revision history for Perl extension Array::Stream::Transactional.
 
 1.01  Sat Apr 3 23:26:00 2004
         - Added regret and reset methods
+
+1.02  Thu Apr 8 21:50:00 2004
+        - Added following and rewind methods
